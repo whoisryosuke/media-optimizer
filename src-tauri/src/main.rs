@@ -8,14 +8,17 @@ use std::fs::File;
 #[tauri::command]
 fn greet(file_name: &str) -> String {
 
+    println!("filename: {}", file_name);
     let path = std::path::PathBuf::from(file_name);
+
+    let output_file_name = &path.file_name().expect("No file name").to_str().expect("Couldn't convert filename to string");
 
     let decoder = Decoder::from_path(&path).unwrap();
 
     let image = decoder.decode().unwrap();
 
     // Setup image
-    let file = File::create("output-frontend.png").expect("Failed to create file");
+    let file = File::create(output_file_name).expect("Failed to create file");
 
     // Configure encoder with settings like file type, compression, etc
     let resize_config = ResizeConfig::new(ResizeType::Lanczos3)

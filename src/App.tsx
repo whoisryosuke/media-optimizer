@@ -8,9 +8,10 @@ function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
 
-  async function greet() {
+  async function greet(fileName: string) {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { fileName: name }));
+    console.log("opening file", fileName);
+    if (name) await invoke("greet", { fileName });
   }
 
   const handleOpen = async () => {
@@ -20,7 +21,7 @@ function App() {
       filters: [
         {
           name: "Image",
-          extensions: ["png", "jpeg"],
+          extensions: ["png", "jpeg", "jpg"],
         },
       ],
     });
@@ -34,7 +35,7 @@ function App() {
     if (Array.isArray(selected)) {
       // user selected multiple files
       setName(selected[0]);
-      greet();
+      greet(selected[0]);
     }
   };
 
