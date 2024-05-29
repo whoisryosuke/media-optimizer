@@ -11,13 +11,14 @@ fn greet(file_name: &str) -> String {
     println!("filename: {}", file_name);
     let path = std::path::PathBuf::from(file_name);
 
+    // Get file name from path.
     let output_file_name = &path.file_name().expect("No file name").to_str().expect("Couldn't convert filename to string");
 
+    // Load image data
     let decoder = Decoder::from_path(&path).unwrap();
-
     let image = decoder.decode().unwrap();
 
-    // Setup image
+    // Setup new image file
     let file = File::create(output_file_name).expect("Failed to create file");
 
     // Configure encoder with settings like file type, compression, etc
@@ -31,7 +32,7 @@ fn greet(file_name: &str) -> String {
         // .with_resize(resize_config);
     let encoder = Encoder::new(file, image).with_config(config);
 
-    // Run encoder
+    // Run encoder and generate image
     let result = encoder.encode().unwrap();
     
     println!("Image encoded");
