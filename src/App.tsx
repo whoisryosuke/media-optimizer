@@ -2,16 +2,17 @@ import { useState } from "react";
 import reactLogo from "./assets/react.svg";
 import { invoke } from "@tauri-apps/api/tauri";
 import { open } from "@tauri-apps/api/dialog";
-import "./App.css";
+import { Button, Slider, Text, Title } from "@mantine/core";
 
 function App() {
   const [greetMsg, setGreetMsg] = useState("");
   const [name, setName] = useState("");
+  const [quality, setQuality] = useState(50);
 
   async function greet(fileName: string) {
     // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
     console.log("opening file", fileName);
-    if (name) await invoke("greet", { fileName });
+    if (name) await invoke("greet", { fileName, quality });
   }
 
   const handleOpen = async () => {
@@ -39,27 +40,28 @@ function App() {
     }
   };
 
+  const handleQuality = (value: number) => {
+    setQuality(value);
+  };
+
   return (
     <div className="container">
-      <h1>Welcome to Tauri!</h1>
+      <Title>Media Optimizer</Title>
+      <Text>Select a file to compress it</Text>
 
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+      <Slider
+        value={quality}
+        onChange={handleQuality}
+        marks={[
+          { value: 20, label: "20%" },
+          { value: 50, label: "50%" },
+          { value: 80, label: "80%" },
+        ]}
+      />
 
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
+      <Button onClick={handleOpen}>Compress file</Button>
 
-      <button onClick={handleOpen}>Compress file</button>
-
-      <p>{greetMsg}</p>
+      <Text>{greetMsg}</Text>
     </div>
   );
 }

@@ -6,7 +6,7 @@ use std::fs::File;
 
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 #[tauri::command]
-fn greet(file_name: &str) -> String {
+fn greet(file_name: &str, quality: i32) -> String {
 
     println!("filename: {}", file_name);
     let path = std::path::PathBuf::from(file_name);
@@ -27,7 +27,7 @@ fn greet(file_name: &str) -> String {
         .with_height(600);
 
     let config = EncoderConfig::new(Codec::OxiPng)
-        .with_quality(50.0)
+        .with_quality(quality as f32)
         .expect("Quality didn't work");
         // .with_resize(resize_config);
     let encoder = Encoder::new(file, image).with_config(config);
