@@ -11,6 +11,7 @@ fn greet(file_name: &str, quality: i32) -> String {
     println!("filename: {}", file_name);
     let path = std::path::PathBuf::from(file_name);
 
+    // Get the file extension (e.g. JPG, PNG, etc)
     let default_file_type = OsStr::new("png");
     let file_type = path.extension().or(Some(default_file_type)).expect("No file extension found").to_str().expect("Couldn't convert to string");
 
@@ -30,6 +31,7 @@ fn greet(file_name: &str, quality: i32) -> String {
         .with_width(800)
         .with_height(600);
 
+    // Select the correct image encoder based on file extension
     let codec = match file_type {
         "png" => Codec::OxiPng,
         "jpg" => Codec::MozJpeg,
